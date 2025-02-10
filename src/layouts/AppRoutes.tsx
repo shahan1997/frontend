@@ -3,7 +3,9 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { Loader } from "../components/Loader";
 
 // Import the Product component lazily
-const Product = React.lazy(() => import("../page/Product"));
+const Dashboard = React.lazy(() => import("../page/Dashboard"));
+const PizzaMenu = React.lazy(() => import("../page/Menu"));
+const Card = React.lazy(() => import("../page/Card"));
 
 /**
  * AppRoutes will load the app routes.
@@ -19,12 +21,30 @@ const AppRoutes = () => {
       */}
 
       {/* Default route - Redirect to /product */}
-      <Route path="/" element={<Navigate to="/product" />} />
+      <Route path="/" element={<Navigate to="/dashboard" />} />
+
       <Route
-        path="/product"
+        path="/menu"
         element={
           <Suspense fallback={<Loader />}>
-            <Product />
+            <PizzaMenu />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/card"
+        element={
+          <Suspense fallback={<Loader />}>
+            <Card />
+          </Suspense>
+        }
+      />
+
+      <Route
+        path="/dashboard"
+        element={
+          <Suspense fallback={<Loader />}>
+            <Dashboard />
           </Suspense>
         }
       />

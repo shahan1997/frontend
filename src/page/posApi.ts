@@ -20,7 +20,7 @@ export const posApi = createApi({
     getAllProduct: builder.query<IApiResponse, void>({
       query: (request) => {
         return {
-          url: "/products",
+          url: "/",
           method: "GET",
         };
       },

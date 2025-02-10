@@ -1,66 +1,71 @@
 import React from "react";
-import AppBar from "@mui/material/AppBar";
-import Grid from "@mui/material/Grid2";
 import {
   Box,
   Typography,
-  Avatar,
   IconButton,
-  Tooltip,
-  useTheme,
   Badge,
+  AppBar,
+  Toolbar,
 } from "@mui/material";
 import { appColors } from "../../theme/appColors";
-import { keyframes } from "@mui/system";
 import { header } from "../../styles/header";
-
-const marqueeAnimation = keyframes`
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
-`;
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectBasketItems } from "../../page/Menu/store/BasketSelector";
 
 const Header = ({ ...rest }) => {
+  const selectItem = useSelector(selectBasketItems);
+  const navigate = useNavigate();
+
+  const goToMenuCard = () => {
+    navigate("/card");
+  };
   return (
     <Box sx={{ ...header }} {...rest}>
-      <Box>
-        <Grid container sx={{ width: "100%", height: "100px" }}>
-          <Grid size={8}></Grid>
-          <Grid display="flex" justifyContent="flex-end" size={4}>
+      <AppBar position="static" elevation={0} sx={{ mb: 3 }}>
+        <Toolbar sx={{ mt: 1 }}>
+          <img
+            src={
+              "https://i.ibb.co/cTCzD3n/istockphoto-1125921857-612x612-removebg-preview.png"
+            }
+            alt="Logo"
+            style={{ height: 60 }}
+          />
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, fontWeight: 600, color: appColors.white }}
+          >
+            Pizza
+          </Typography>
+          <IconButton
+            color="inherit"
+            aria-label="shopping cart"
+            onClick={goToMenuCard}
+          >
             <Badge
-              color="success"
-              overlap="circular"
+              badgeContent={selectItem.length}
+              color="secondary"
               sx={{
                 "& .MuiBadge-badge": {
-                  right: 7,
-                  minWidth: "10px",
-                  height: "10px",
-                  borderRadius: "100%",
-                  top: 45,
-                  mr: "23px",
-                  backgroundColor: appColors.green,
+                  right: 2,
+                  top: 11,
+                  backgroundColor: appColors.orange[50],
                 },
               }}
-              badgeContent=" "
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
             >
-              <Box
-                color="success"
+              <ShoppingCartIcon
                 sx={{
-                  width: "60px",
-                  height: "60px",
-                  borderRadius: "50%",
-                  mt: "5px",
-                  mr: "20px",
-                  backgroundColor: appColors.blue,
+                  width: "40px",
+                  height: "40px",
+                  color: appColors.white,
                 }}
               />
             </Badge>
-          </Grid>
-        </Grid>
-      </Box>
+          </IconButton>
+        </Toolbar>
+      </AppBar>
     </Box>
   );
 };

@@ -6,9 +6,6 @@ export type POSStores = EnumLiteralsOf<typeof POSStores>;
 
 export const POSStores = Object.freeze({
   DEFAULT: "DEFAULT" as const,
-  PRODUCT: "PRODUCT" as const,
-  CATEGORY: "CATEGORY" as const,
-  USERMANAGE: "USERMANAGE" as const,
 });
 
 export interface POSItem {

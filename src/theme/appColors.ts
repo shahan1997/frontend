@@ -138,6 +138,7 @@ export const appColors = {
     10: "#f5f5f5",
   },
   orange: {
+    80: "#D43F00",
     70: "#b26a00",
     50: "#FFA500",
     10: "#FCF5C7",

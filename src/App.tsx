@@ -4,6 +4,7 @@ import { Header } from "./layouts/Header";
 import AppRoutes from "./layouts/AppRoutes";
 import { BrowserRouter } from "react-router-dom";
 import withAppProviders from "./withAppProviders";
+import Footer from "./layouts/Footer";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Box>
           <Header data-testid="Header" />
           <AppRoutes />
+          <Footer />
         </Box>
       </BrowserRouter>
     </Box>

@@ -42,7 +42,7 @@ export const palette = {
     contrastText: appColors.white,
   },
   text: {
-    primary: appColors.royalBlue[100],
+    primary: appColors.black[100],
     secondary: appColors.black[80],
     disabled: appColors.black[50],
   },

@@ -8,22 +8,30 @@ export interface IApiResponse {
 export interface IProductImage {
   url: string;
   isFeatured: boolean;
-  _id: string;
 }
 
 export interface IProductData {
-  _id: string;
   name: string;
   sku: string;
   price: number;
   quantity: number;
   description: string;
   images: IProductImage[];
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+}
+export interface IIngredient {
+  name: string;
+  price: number;
+}
+
+export interface IPizza {
+  _id: string;
+  name: string;
+  basePrice: number;
+  description: string;
+  ingredients: IIngredient[];
+  images: string[];
 }
 
 export interface IProductListResponse {
-  products: IProductData[];
+  pizzas: IPizza[];
 }
