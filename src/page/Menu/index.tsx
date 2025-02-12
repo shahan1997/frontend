@@ -82,9 +82,20 @@ const PizzaMenu = () => {
                   <CardMedia
                     component="img"
                     height="140"
-                    image={pizza.images[0]}
+                    image={
+                      pizza.images[0].startsWith("/")
+                        ? `http://localhost:5000${pizza.images[0]}`
+                        : pizza.images[0]
+                    }
                     alt={pizza.name}
-                    sx={{ objectFit: "cover", marginLeft: "0px" }}
+                    sx={{
+                      objectFit: "cover",
+                      marginLeft: "0px",
+                      transition: "transform 0.3s ease-in-out",
+                      "&:hover": {
+                        transform: "scale(1.1)",
+                      },
+                    }}
                   />
                   <CardContent>
                     <Typography

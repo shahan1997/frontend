@@ -108,7 +108,6 @@ const SelectItem: React.FC<PizzaDetailsDialogProps> = ({
             boxShadow: "none",
           }}
         >
-          {/* Left Side - Image */}
           <CardMedia
             component="img"
             sx={{
@@ -117,11 +116,14 @@ const SelectItem: React.FC<PizzaDetailsDialogProps> = ({
               objectFit: "cover",
               borderRadius: 2,
             }}
-            image={pizza.images[0]}
+            image={
+              pizza.images[0].startsWith("/")
+                ? `http://localhost:5000${pizza.images[0]}`
+                : pizza.images[0]
+            }
             alt={pizza.name}
           />
 
-          {/* Right Side - Content */}
           <Box sx={{ flex: 1 }}>
             <Typography
               variant="body1"
@@ -130,16 +132,14 @@ const SelectItem: React.FC<PizzaDetailsDialogProps> = ({
               {pizza.description}
             </Typography>
 
-            {/* Base Price and Quantity */}
             <Box sx={{ display: "flex", alignItems: "center", marginTop: 2 }}>
               <Typography
                 variant="h6"
                 sx={{ fontWeight: "bold", marginRight: 2 }}
               >
-                Base Price: ${pizza.basePrice.toFixed(2)}
+                Price ${pizza.basePrice.toFixed(2)}
               </Typography>
 
-              {/* Quantity Selector */}
               <Box sx={{ display: "flex", alignItems: "center", pl: 5 }}>
                 <Typography variant="h6" sx={{ marginRight: 1 }}>
                   Quantity:
@@ -154,7 +154,6 @@ const SelectItem: React.FC<PizzaDetailsDialogProps> = ({
               </Box>
             </Box>
 
-            {/* Ingredients Selection */}
             <Divider sx={{ my: 2 }} />
             <Typography variant="h6">Select Extra Ingredients:</Typography>
             <FormGroup sx={{ maxHeight: "120px", overflowY: "auto", mt: 1 }}>
@@ -178,7 +177,6 @@ const SelectItem: React.FC<PizzaDetailsDialogProps> = ({
               ))}
             </FormGroup>
 
-            {/* Total Price Section */}
             <Typography
               variant="h6"
               sx={{
@@ -194,7 +192,6 @@ const SelectItem: React.FC<PizzaDetailsDialogProps> = ({
         </Card>
       </DialogContent>
 
-      {/* Actions */}
       <DialogActions sx={{ display: "flex", justifyContent: "space-between" }}>
         <Button onClick={onClose} color="primary">
           Cancel

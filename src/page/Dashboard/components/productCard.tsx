@@ -4,6 +4,7 @@ import type React from "react";
 import { useState } from "react";
 import { Card, CardMedia, Typography, Box } from "@mui/material";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 interface ProductProps {
   image: string;
@@ -21,6 +22,10 @@ const ProductCard: React.FC<ProductProps> = ({
   interest,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
+  const goToMenu = () => {
+    navigate("/menu");
+  };
 
   return (
     <Card
@@ -30,6 +35,7 @@ const ProductCard: React.FC<ProductProps> = ({
       whileHover="hovered"
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
+      onClick={goToMenu}
       sx={{
         width: 300,
         height: 400,
@@ -57,7 +63,6 @@ const ProductCard: React.FC<ProductProps> = ({
       />
 
       <Box sx={{ position: "relative", zIndex: 1, height: "100%" }}>
-        {/* Image */}
         <motion.div
           variants={{
             rest: { y: 0 },
@@ -67,7 +72,7 @@ const ProductCard: React.FC<ProductProps> = ({
           style={{ position: "absolute", top: 10, left: 0, right: 0 }}
         >
           <CardMedia component="img" height="230" image={image} alt={title} />
-          {/* Pizza love you text */}
+
           <motion.div
             variants={{
               rest: { opacity: 1, y: 0 },
@@ -133,7 +138,6 @@ const ProductCard: React.FC<ProductProps> = ({
           </Typography>
         </motion.div>
 
-        {/* Description (appears on hover) */}
         <motion.div
           variants={{
             rest: { opacity: 0, y: 20 },

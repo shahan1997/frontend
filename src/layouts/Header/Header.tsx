@@ -26,19 +26,11 @@ const Header = ({ ...rest }) => {
       <AppBar position="static" elevation={0} sx={{ mb: 3 }}>
         <Toolbar sx={{ mt: 1 }}>
           <img
-            src={
-              "https://i.ibb.co/cTCzD3n/istockphoto-1125921857-612x612-removebg-preview.png"
-            }
+            src={"https://i.ibb.co/xyWVwZv/logo.png"}
             alt="Logo"
             style={{ height: 60 }}
           />
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1, fontWeight: 600, color: appColors.white }}
-          >
-            Pizza
-          </Typography>
+          
           <IconButton
             color="inherit"
             aria-label="shopping cart"

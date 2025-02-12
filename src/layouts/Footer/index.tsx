@@ -36,25 +36,25 @@ const Footer = () => {
                 variant="h6"
                 sx={{ fontWeight: "bold", color: appColors.white }}
               >
-                Pizza Shop Name
+                Pizza Customer
               </Typography>
               <Typography
                 variant="body2"
                 sx={{ marginBottom: 1, color: appColors.white }}
               >
-                1234 Pizza Street, Townsville
+                201, main road, Batticaloa
               </Typography>
               <Typography
                 variant="body2"
                 sx={{ marginBottom: 1, color: appColors.white }}
               >
-                Phone: (123) 456-7890
+                Phone: 0652225424
               </Typography>
               <Typography
                 variant="body2"
                 sx={{ marginBottom: 1, color: appColors.white }}
               >
-                Email: contact@pizzashop.com
+                Email: pizzacustomer@pizza.com
               </Typography>
 
               <Typography
