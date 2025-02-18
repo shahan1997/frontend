@@ -25,11 +25,23 @@ export const basket = createSlice({
         (element) => element._id === temItem._id
       );
       if (findItem) {
-        findItem.count = temItem.count; // Update the count or apply any other logic
-        findItem.totalPrice = temItem.totalPrice; // Update the total price based on the updated count
+        findItem.count = temItem.count;
+        findItem.totalPrice = temItem.totalPrice;
         findItem.selectedIngredients = temItem.selectedIngredients;
       } else {
         state.items.push(temItem);
+      }
+    },
+    updateItemCount: (
+      state,
+      action: PayloadAction<{ id: string; count: number; totalPrice: number }>
+    ) => {
+      const { id, count, totalPrice } = action.payload;
+      const findItem = state.items.find((item) => item._id === id);
+
+      if (findItem && count > 0) {
+        findItem.count = count;
+        findItem.totalPrice = totalPrice;
       }
     },
     removeItem: (state, action: PayloadAction<string>) => {
@@ -47,7 +59,8 @@ export const basket = createSlice({
   },
 });
 
-export const { addItem, removeItem, removeBasket } = basket.actions;
+export const { addItem, removeItem, removeBasket, updateItemCount } =
+  basket.actions;
 
 export const BasketReducer = basket.reducer;
 

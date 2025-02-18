@@ -10,14 +10,8 @@ import {
   TableRow,
   Button,
   Paper,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  TextField,
+  CircularProgress,
+  IconButton,
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { selectBasketItems } from "../Menu/store/BasketSelector";
@@ -25,82 +19,121 @@ import {
   BasketItem,
   removeBasket,
   removeItem,
+  updateItemCount,
 } from "../Menu/store/BasketSlice";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { appColors } from "../../theme/appColors";
 import { useNotifier } from "../../core/Notifier";
 import { useNavigate } from "react-router-dom";
+import { useCancelOrderMutation, usePlaceOrderMutation } from "../posApi";
+import { IOrderID } from "../../core/interface/api.interface";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 const CartView = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const selectItem = useSelector(selectBasketItems);
+  const [cancelOrder, { isLoading: updating, error: updateError }] =
+    useCancelOrderMutation();
   const { showMessage } = useNotifier();
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
+  const [placeOrder, { isLoading, error }] = usePlaceOrderMutation();
+  const [orderId, setOrderId] = useState<IOrderID | null>(null);
 
-  const [openCheckout, setOpenCheckout] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState("card");
-
-  // User details state
-  const [userDetails, setUserDetails] = useState({
-    name: "",
-    address: "",
-    mobile: "",
-  });
-
-  // Validation errors
-  const [errors, setErrors] = useState({
-    name: false,
-    address: false,
-    mobile: false,
-  });
-
-  const getTotalPrice = (item: BasketItem) => {
-    const ingredientsTotal = item.selectedIngredients.reduce(
-      (acc, ingredient) => acc + ingredient.price,
-      0
-    );
-    return item.basePrice + ingredientsTotal;
-  };
-
-  const totalPrice = selectItem.reduce(
-    (acc, item) => acc + getTotalPrice(item) * item.count,
-    0
-  );
+  const totalPrice = selectItem
+    .reduce((acc, item) => acc + item.totalPrice, 0)
+    .toFixed(2);
 
   const handleDelete = (itemId: string) => {
     dispatch(removeItem(itemId));
     showMessage("Order deleted from Cart");
   };
 
-  const handleProceedToCheckout = () => {
-    setOpenCheckout(true);
+  const handleUpdateStatus = async () => {
+    try {
+      const response = await cancelOrder(orderId?._id ?? "").unwrap();
+      if (response.status) {
+        showMessage(response.message);
+
+        dispatch(removeBasket());
+      } else {
+        showMessage(response.message);
+      }
+    } catch (error) {
+      console.error("Failed to update order", error);
+    }
   };
 
-  const handleConfirmPayment = () => {
-    let newErrors = {
-      name: userDetails.name.trim() === "",
-      address: userDetails.address.trim() === "",
-      mobile: userDetails.mobile.trim() === "",
+  const handleIncrease = (item: BasketItem) => {
+    const newCount = item.count + 1;
+    const newTotalPrice =
+      newCount * item.basePrice +
+      item.selectedIngredients.reduce(
+        (acc, ingredient) => acc + ingredient.price,
+        0
+      );
+    dispatch(
+      updateItemCount({
+        id: item._id,
+        count: newCount,
+        totalPrice: newTotalPrice,
+      })
+    );
+  };
+
+  const handleDecrease = (item: BasketItem) => {
+    if (item.count > 1) {
+      const newCount = item.count - 1;
+      const newTotalPrice =
+        newCount * item.basePrice +
+        item.selectedIngredients.reduce(
+          (acc, ingredient) => acc + ingredient.price,
+          0
+        );
+
+      dispatch(
+        updateItemCount({
+          id: item._id,
+          count: newCount,
+          totalPrice: newTotalPrice,
+        })
+      );
+    } else {
+      handleDelete(item._id);
+    }
+  };
+
+  const handleProceedToCheckout = async () => {
+    const orderData = {
+      pizzas: selectItem.map((item: BasketItem) => ({
+        pizzaId: item._id,
+        name: item.name,
+        images: item.images[0],
+        basePrice: item.basePrice,
+        description: item.description,
+        ingredients: item.selectedIngredients,
+        quantity: item.count,
+        totalPrice: item.totalPrice,
+        customText: item.customization,
+      })),
+      totalAmount: totalPrice,
     };
 
-    setErrors(newErrors);
-
-    if (Object.values(newErrors).some((error) => error)) {
-      showMessage(
-        "Please fill in all the details before confirming payment.",
-        "error"
-      );
-      return;
+    try {
+      const response = await placeOrder(orderData).unwrap();
+      const orderID = response.data as IOrderID;
+      setOrderId(orderID);
+      if (response.status) {
+        showMessage("We get your order");
+        setIsOrderPlaced(true);
+      } else {
+        showMessage(response.message);
+      }
+    } catch (err) {
+      console.error("Order placement failed", err);
+      showMessage("Order placement failed", "error");
     }
-
-    showMessage(`Payment successful using ${paymentMethod}`);
-
-    setOpenCheckout(false);
-    setIsOrderPlaced(true);
-    // navigate("/", { replace: true });
-
-    // dispatch(removeBasket());
   };
 
   return (
@@ -138,16 +171,22 @@ const CartView = () => {
                   <TableCell sx={{ fontWeight: "bold" }}>
                     Product Name
                   </TableCell>
-                  <TableCell sx={{ fontWeight: "bold" }}>Base Price</TableCell>
-                  <TableCell sx={{ fontWeight: "bold" }}>Ingredients</TableCell>
-                  <TableCell sx={{ fontWeight: "bold" }}>Total Price</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>
+                    Base Price * Qty
+                  </TableCell>
                   <TableCell sx={{ fontWeight: "bold" }}>Quantity</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>
+                    Ingredients
+                  </TableCell>{" "}
+                  <TableCell sx={{ fontWeight: "bold" }}>
+                    Special Instructions
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>Total Price</TableCell>
                   <TableCell sx={{ fontWeight: "bold" }}></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {selectItem.map((item, idx) => {
-                  const itemTotalPrice = getTotalPrice(item) * item.count;
                   return (
                     <TableRow
                       key={idx}
@@ -167,7 +206,18 @@ const CartView = () => {
                         />
                       </TableCell>
                       <TableCell>{item.name}</TableCell>
-                      <TableCell>${item.basePrice.toFixed(2)}</TableCell>
+                      <TableCell>
+                        ${item.basePrice.toFixed(2)} * {item.count}
+                      </TableCell>
+                      <TableCell>
+                        <IconButton onClick={() => handleDecrease(item)}>
+                          <RemoveIcon />
+                        </IconButton>
+                        {item.count}
+                        <IconButton onClick={() => handleIncrease(item)}>
+                          <AddIcon />
+                        </IconButton>
+                      </TableCell>
                       <TableCell>
                         {item.selectedIngredients.length > 0 ? (
                           <ul>
@@ -183,9 +233,13 @@ const CartView = () => {
                             No extra ingredients
                           </Typography>
                         )}
+                      </TableCell>{" "}
+                      <TableCell>
+                        {item.customization && item.customization.trim() !== ""
+                          ? item.customization
+                          : "N/A"}
                       </TableCell>
-                      <TableCell>${itemTotalPrice.toFixed(2)}</TableCell>
-                      <TableCell>{item.count}</TableCell>
+                      <TableCell> ${item.totalPrice.toFixed(2)}</TableCell>
                       <TableCell>
                         <DeleteOutlinedIcon
                           onClick={() => handleDelete(item._id)}
@@ -207,100 +261,38 @@ const CartView = () => {
               variant="h5"
               sx={{ fontWeight: "bold", color: "#3f51b5" }}
             >
-              Total Price for All Items: ${totalPrice.toFixed(2)}
+              Total Price for All Items: ${totalPrice}
             </Typography>
             <Button
               variant="contained"
+              disabled={isLoading}
               color="primary"
               onClick={isOrderPlaced ? () => {} : handleProceedToCheckout}
               sx={{ marginTop: 2 }}
             >
+              {" "}
+              {isLoading && (
+                <CircularProgress size={16} sx={{ color: "white", mr: 1 }} />
+              )}
               {isOrderPlaced ? "Track the Order" : "Proceed to Checkout"}
             </Button>
+            {isOrderPlaced && (
+              <Button
+                variant="outlined"
+                disabled={updating}
+                color="secondary"
+                onClick={handleUpdateStatus}
+                sx={{ marginTop: 2, marginLeft: 2 }}
+              >
+                {updating && (
+                  <CircularProgress size={16} sx={{ color: "white", mr: 1 }} />
+                )}
+                Cancel Order
+              </Button>
+            )}
           </Box>
         </>
       )}
-
-      {/* Checkout Dialog */}
-      <Dialog open={openCheckout} onClose={() => setOpenCheckout(false)}>
-        <DialogTitle>Confirm Your Payment</DialogTitle>
-        <DialogContent>
-          <Typography variant="h6">Total: ${totalPrice.toFixed(2)}</Typography>
-
-          <TextField
-            label="Full Name"
-            fullWidth
-            margin="dense"
-            value={userDetails.name}
-            onChange={(e) =>
-              setUserDetails({ ...userDetails, name: e.target.value })
-            }
-            error={errors.name}
-            helperText={errors.name ? "Name is required" : ""}
-          />
-          <TextField
-            label="Address"
-            fullWidth
-            margin="dense"
-            multiline
-            rows={2}
-            value={userDetails.address}
-            onChange={(e) =>
-              setUserDetails({ ...userDetails, address: e.target.value })
-            }
-            error={errors.address}
-            helperText={errors.address ? "Address is required" : ""}
-          />
-          <TextField
-            label="Mobile Number"
-            fullWidth
-            margin="dense"
-            type="tel"
-            value={userDetails.mobile}
-            onChange={(e) =>
-              setUserDetails({ ...userDetails, mobile: e.target.value })
-            }
-            error={errors.mobile}
-            helperText={errors.mobile ? "Mobile number is required" : ""}
-          />
-
-          <Typography variant="h6" sx={{ marginTop: 2 }}>
-            Select Payment Method:
-          </Typography>
-          <RadioGroup
-            value={paymentMethod}
-            onChange={(e) => setPaymentMethod(e.target.value)}
-          >
-            <FormControlLabel
-              value="card"
-              control={<Radio />}
-              label="Credit/Debit Card"
-            />
-            <FormControlLabel
-              value="paypal"
-              control={<Radio />}
-              label="PayPal"
-            />
-            <FormControlLabel
-              value="upi"
-              control={<Radio />}
-              label="UPI Payment"
-            />
-          </RadioGroup>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenCheckout(false)} color="secondary">
-            Cancel
-          </Button>
-          <Button
-            onClick={handleConfirmPayment}
-            color="primary"
-            variant="contained"
-          >
-            Confirm Payment
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 };

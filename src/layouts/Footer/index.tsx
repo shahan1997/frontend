@@ -1,7 +1,14 @@
-import { Box, Container, Grid, Typography } from "@mui/material";
+import React from "react";
+import { Box, Container, Grid, Typography, Link } from "@mui/material";
 import { appColors } from "../../theme/appColors";
+import { selectEnableAuth } from "../../page/Login/store/AuthSelector";
+import { useSelector } from "react-redux";
+import { motion } from "framer-motion";
 
 const Footer = () => {
+  const isAdmin = useSelector(selectEnableAuth);
+  const linkHover = { x: 5, color: "white" };
+
   return (
     <Box
       sx={{
@@ -11,10 +18,9 @@ const Footer = () => {
       }}
     >
       <Container maxWidth="lg">
-        <Grid container spacing={2} alignItems="center">
-          {/* Left side: Image */}
+        <Grid container spacing={4} alignItems="center">
           <Grid item xs={12} sm={4}>
-            <Box sx={{ display: "flex", justifyContent: "start" }}>
+            <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
               <img
                 src={require("../../assets/images/footer.png")}
                 alt="Pizza Logo"
@@ -22,14 +28,89 @@ const Footer = () => {
               />
             </Box>
           </Grid>
-
-          <Grid item xs={12} sm={8}>
+          <Grid item xs={12} sm={4}>
             <Box
               sx={{
-                paddingLeft: 50,
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "flex-start",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: "bold", color: appColors.white }}
+              >
+                Quick Links
+              </Typography>
+              <Link
+                component={motion.a}
+                href="/dashboard"
+                color="inherit"
+                underline="hover"
+                sx={{ mt: 1 }}
+                whileHover={linkHover}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                Home
+              </Link>
+              <Link
+                component={motion.a}
+                href="/menu"
+                color="inherit"
+                underline="hover"
+                sx={{ mt: 1 }}
+                whileHover={linkHover}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                Menu
+              </Link>
+              <Link
+                component={motion.a}
+                href="/contact-form"
+                color="inherit"
+                underline="hover"
+                sx={{ mt: 1 }}
+                whileHover={linkHover}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                Contact Us
+              </Link>
+              {isAdmin && (
+                <Link
+                  component={motion.a}
+                  href="/products"
+                  color="inherit"
+                  underline="hover"
+                  sx={{ mt: 1 }}
+                  whileHover={linkHover}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  Products
+                </Link>
+              )}
+              {isAdmin && (
+                <Link
+                  component={motion.a}
+                  href="/order"
+                  color="inherit"
+                  underline="hover"
+                  sx={{ mt: 1 }}
+                  whileHover={linkHover}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  Order
+                </Link>
+              )}
+            </Box>
+          </Grid>
+          ={" "}
+          <Grid item xs={12} sm={4}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: { xs: "center", sm: "flex-end" },
+                paddingRight: { xs: 0, sm: 5 },
               }}
             >
               <Typography
@@ -40,26 +121,29 @@ const Footer = () => {
               </Typography>
               <Typography
                 variant="body2"
-                sx={{ marginBottom: 1, color: appColors.white }}
+                sx={{ mt: 1, color: appColors.white }}
               >
                 201, main road, Batticaloa
               </Typography>
               <Typography
                 variant="body2"
-                sx={{ marginBottom: 1, color: appColors.white }}
+                sx={{ mt: 1, color: appColors.white }}
               >
                 Phone: 0652225424
               </Typography>
               <Typography
                 variant="body2"
-                sx={{ marginBottom: 1, color: appColors.white }}
+                sx={{ mt: 1, color: appColors.white }}
               >
                 Email: pizzacustomer@pizza.com
               </Typography>
-
               <Typography
                 variant="body2"
-                sx={{ textAlign: "center", color: appColors.royalBlue[90] }}
+                sx={{
+                  mt: 1,
+                  textAlign: "center",
+                  color: appColors.royalBlue[90],
+                }}
               >
                 © 2025 Pizza Shop. All Rights Reserved.
               </Typography>

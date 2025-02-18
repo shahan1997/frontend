@@ -9,6 +9,10 @@ import ProductCard from "./components/productCard";
 import AdsCard from "./components/adsCard";
 import { useNavigate } from "react-router-dom";
 import { Variants } from "framer-motion";
+import { useSelector } from "react-redux";
+import { selectEnableAuth } from "../Login/store/AuthSelector";
+import LoginCard from "./components/loginCard";
+import { Loader } from "../../components/Loader";
 
 const heroImage = require("../../assets/images/hero-2.png");
 const parcely = require("../../assets/images/leavesP.png");
@@ -56,8 +60,16 @@ const products = [
 ];
 
 const Dashboard: React.FC = () => {
+  const isAdmin = useSelector(selectEnableAuth);
   const navigate = useNavigate();
   const [showIngredients, setShowIngredients] = useState(false);
+  const [showSkeleton, setShowSkeleton] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSkeleton(false);
+    }, 100); // 10 seconds
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -69,6 +81,14 @@ const Dashboard: React.FC = () => {
 
   const goToMenu = () => {
     navigate("/menu");
+  };
+
+  const goToLogin = () => {
+    if (isAdmin) {
+      navigate("/order");
+    } else {
+      navigate("/login");
+    }
   };
 
   const tomatoAnimation1 = {
@@ -205,258 +225,268 @@ const Dashboard: React.FC = () => {
 
   return (
     <div>
-      <Box
-        sx={{
-          position: "relative",
-          width: "100%",
-          height: "530px",
-          overflow: "hidden",
-          backgroundColor: "#000",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "0 5vw",
-          marginBottom: 3,
-        }}
-      >
-        {/* Animated Ingredients */}
-        <AnimatePresence>
-          {showIngredients && (
-            <>
-              <motion.img
-                src={tomato}
-                alt="Tomato 1"
-                style={{
-                  position: "absolute",
-                  width: "80px",
-                  height: "80px",
-                  objectFit: "contain",
-                  zIndex: 2,
-                  left: "10%",
-                  top: "10%",
-                }}
-                variants={tomatoAnimation1}
-                initial="hidden"
-                animate="visible"
-              />
-              <motion.img
-                src={tomato}
-                alt="Tomato 2"
-                style={{
-                  position: "absolute",
-                  width: "140px",
-                  height: "140px",
-                  objectFit: "contain",
-                  zIndex: 2,
-                  left: "50%",
-                  top: "5%",
-                }}
-                variants={tomatoAnimation2}
-                initial="hidden"
-                animate="visible"
-              />
-              <motion.img
-                src={tomato}
-                alt="Tomato 3"
-                style={{
-                  position: "absolute",
-                  width: "50px",
-                  height: "50px",
-                  objectFit: "contain",
-                  zIndex: 2,
-                  left: "90%",
-                  top: "15%",
-                }}
-                variants={tomatoAnimation3}
-                initial="hidden"
-                animate="visible"
-              />
-              <motion.img
-                src={onion1}
-                alt="Onion 1"
-                style={{
-                  position: "absolute",
-                  width: "80px",
-                  height: "80px",
-                  objectFit: "contain",
-                  zIndex: 2,
-                  left: "20%",
-                  bottom: "10%",
-                }}
-                variants={onionAnimation1}
-                initial="hidden"
-                animate="visible"
-              />
-              <motion.img
-                src={onion2}
-                alt="Onion 2"
-                style={{
-                  position: "absolute",
-                  width: "80px",
-                  height: "80px",
-                  objectFit: "contain",
-                  zIndex: 2,
-                  left: "80%",
-                  bottom: "15%",
-                }}
-                variants={onionAnimation2}
-                initial="hidden"
-                animate="visible"
-              />
-              <motion.img
-                src={parcely}
-                alt="Parcely"
-                style={{
-                  position: "absolute",
-                  width: "100px",
-                  height: "50px",
-                  objectFit: "contain",
-                  zIndex: 2,
-                  left: "50%",
-                  top: "50%",
-                }}
-                variants={parcelyAnimation1}
-                initial="hidden"
-                animate="visible"
-              />
-              <motion.img
-                src={parcely}
-                alt="Parcely"
-                style={{
-                  position: "absolute",
-                  width: "60px",
-                  height: "60px",
-                  objectFit: "contain",
-                  zIndex: 2,
-                  left: "50%",
-                  top: "50%",
-                }}
-                variants={parcelyAnimation2}
-                initial="hidden"
-                animate="visible"
-              />
-              <motion.img
-                src={parcely}
-                alt="Parcely"
-                style={{
-                  position: "absolute",
-                  width: "80px",
-                  height: "80px",
-                  objectFit: "contain",
-                  zIndex: 2,
-                  left: "50%",
-                  top: "50%",
-                }}
-                variants={parcelyAnimation3}
-                initial="hidden"
-                animate="visible"
-              />
-            </>
-          )}
-        </AnimatePresence>
-
-        <Box
-          sx={{
-            width: "50%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "flex-start",
-            textAlign: "left",
-            zIndex: 3,
-          }}
-        >
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
+      {showSkeleton ? (
+        <>
+          <Box sx={{ width: "100%", borderRadius: 2, m: 4 }}>
+            <Loader />
+          </Box>
+        </>
+      ) : (
+        <>
+          <Box
+            sx={{
+              position: "relative",
+              width: "100%",
+              height: "530px",
+              overflow: "hidden",
+              backgroundColor: "#000",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "0 5vw",
+              marginBottom: 3,
+            }}
           >
-            <Typography
-              variant="h3"
-              fontSize="3.3rem"
-              fontWeight="bold"
-              sx={{ color: appColors.orange[70] }}
-            >
-              Fresh & Tasty Meals
-            </Typography>
-            <Typography
-              variant="h3"
-              fontWeight="bold"
-              sx={{ color: appColors.orange[70] }}
-            >
-              Served with Love!
-            </Typography>
-            <Typography
-              variant="h6"
-              fontWeight="bold"
-              sx={{ mt: 2, color: "#ddd" }}
-            >
-              Experience the taste of fresh, cheesy, and mouth-watering pizza
-              made with the finest ingredients.
-            </Typography>
+            {/* Animated Ingredients */}
+            <AnimatePresence>
+              {showIngredients && (
+                <>
+                  <motion.img
+                    src={tomato}
+                    alt="Tomato 1"
+                    style={{
+                      position: "absolute",
+                      width: "80px",
+                      height: "80px",
+                      objectFit: "contain",
+                      zIndex: 2,
+                      left: "10%",
+                      top: "10%",
+                    }}
+                    variants={tomatoAnimation1}
+                    initial="hidden"
+                    animate="visible"
+                  />
+                  <motion.img
+                    src={tomato}
+                    alt="Tomato 2"
+                    style={{
+                      position: "absolute",
+                      width: "140px",
+                      height: "140px",
+                      objectFit: "contain",
+                      zIndex: 2,
+                      left: "50%",
+                      top: "5%",
+                    }}
+                    variants={tomatoAnimation2}
+                    initial="hidden"
+                    animate="visible"
+                  />
+                  <motion.img
+                    src={tomato}
+                    alt="Tomato 3"
+                    style={{
+                      position: "absolute",
+                      width: "50px",
+                      height: "50px",
+                      objectFit: "contain",
+                      zIndex: 2,
+                      left: "90%",
+                      top: "15%",
+                    }}
+                    variants={tomatoAnimation3}
+                    initial="hidden"
+                    animate="visible"
+                  />
+                  <motion.img
+                    src={onion1}
+                    alt="Onion 1"
+                    style={{
+                      position: "absolute",
+                      width: "80px",
+                      height: "80px",
+                      objectFit: "contain",
+                      zIndex: 2,
+                      left: "20%",
+                      bottom: "10%",
+                    }}
+                    variants={onionAnimation1}
+                    initial="hidden"
+                    animate="visible"
+                  />
+                  <motion.img
+                    src={onion2}
+                    alt="Onion 2"
+                    style={{
+                      position: "absolute",
+                      width: "80px",
+                      height: "80px",
+                      objectFit: "contain",
+                      zIndex: 2,
+                      left: "80%",
+                      bottom: "15%",
+                    }}
+                    variants={onionAnimation2}
+                    initial="hidden"
+                    animate="visible"
+                  />
+                  <motion.img
+                    src={parcely}
+                    alt="Parcely"
+                    style={{
+                      position: "absolute",
+                      width: "100px",
+                      height: "50px",
+                      objectFit: "contain",
+                      zIndex: 2,
+                      left: "50%",
+                      top: "50%",
+                    }}
+                    variants={parcelyAnimation1}
+                    initial="hidden"
+                    animate="visible"
+                  />
+                  <motion.img
+                    src={parcely}
+                    alt="Parcely"
+                    style={{
+                      position: "absolute",
+                      width: "60px",
+                      height: "60px",
+                      objectFit: "contain",
+                      zIndex: 2,
+                      left: "50%",
+                      top: "50%",
+                    }}
+                    variants={parcelyAnimation2}
+                    initial="hidden"
+                    animate="visible"
+                  />
+                  <motion.img
+                    src={parcely}
+                    alt="Parcely"
+                    style={{
+                      position: "absolute",
+                      width: "80px",
+                      height: "80px",
+                      objectFit: "contain",
+                      zIndex: 2,
+                      left: "50%",
+                      top: "50%",
+                    }}
+                    variants={parcelyAnimation3}
+                    initial="hidden"
+                    animate="visible"
+                  />
+                </>
+              )}
+            </AnimatePresence>
 
-            <Button
-              variant="contained"
-              onClick={goToMenu}
+            <Box
               sx={{
-                mt: 8,
-                transition: "transform 0.3s ease-in-out",
-                backgroundColor: appColors.orange[70],
-                color: "white",
-                padding: "10px 20px",
-                fontSize: "18px",
-                "&:hover": {
-                  backgroundColor: appColors.orange[80],
-                  transform: "scale(1.1)",
-                },
+                width: "50%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "flex-start",
+                textAlign: "left",
+                zIndex: 3,
               }}
             >
-              Order Now
-            </Button>
-          </motion.div>
-        </Box>
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1, ease: "easeOut" }}
+              >
+                <Typography
+                  variant="h3"
+                  fontSize="3.3rem"
+                  fontWeight="bold"
+                  sx={{ color: appColors.orange[70] }}
+                >
+                  Fresh & Tasty Meals
+                </Typography>
+                <Typography
+                  variant="h3"
+                  fontWeight="bold"
+                  sx={{ color: appColors.orange[70] }}
+                >
+                  Served with Love!
+                </Typography>
+                <Typography
+                  variant="h6"
+                  fontWeight="bold"
+                  sx={{ mt: 2, color: "#ddd" }}
+                >
+                  Experience the taste of fresh, cheesy, and mouth-watering
+                  pizza made with the finest ingredients.
+                </Typography>
 
-        {/* Hero Image */}
-        <Box
-          sx={{
-            width: "50%",
-            height: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            position: "relative",
-            zIndex: 1,
-          }}
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            style={{
-              width: "100%",
-              height: "100%",
-              backgroundImage: `url(${heroImage})`,
-              backgroundSize: "contain",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-            }}
-          />
-        </Box>
-      </Box>
+                <Button
+                  variant="contained"
+                  onClick={goToMenu}
+                  //   onClick={goToMenu}
+                  sx={{
+                    mt: 8,
+                    transition: "transform 0.3s ease-in-out",
+                    backgroundColor: appColors.orange[70],
+                    color: "white",
+                    padding: "10px 20px",
+                    fontSize: "18px",
+                    "&:hover": {
+                      backgroundColor: appColors.orange[80],
+                      transform: "scale(1.1)",
+                    },
+                  }}
+                >
+                  Order Now
+                </Button>
+              </motion.div>
+            </Box>
 
-      {/* Product Section */}
-      <Box sx={{ pr: 2, pl: 2, pb: 5 }}>
-        <Grid container spacing={3} justifyContent="space-between">
-          {products.map((product, index) => (
-            <Grid item key={index}>
-              <ProductCard {...product} />
+            {/* Hero Image */}
+            <Box
+              sx={{
+                width: "50%",
+                height: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                position: "relative",
+                zIndex: 1,
+              }}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, ease: "easeOut" }}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  backgroundImage: `url(${heroImage})`,
+                  backgroundSize: "contain",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                }}
+              />
+            </Box>
+          </Box>
+
+          {/* Product Section */}
+          <Box sx={{ pr: 2, pl: 2, pb: 5 }}>
+            <Grid container spacing={3} justifyContent="space-between">
+              {products.map((product, index) => (
+                <Grid item key={index}>
+                  <ProductCard {...product} />
+                </Grid>
+              ))}
             </Grid>
-          ))}
-        </Grid>
-      </Box>
-
-      {/* Advertisement Section */}
-      <AdsCard />
+          </Box>
+          <AdsCard />
+          <LoginCard />
+        </>
+      )}
     </div>
   );
 };

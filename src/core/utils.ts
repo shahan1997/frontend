@@ -14,19 +14,13 @@ export const getPriceFormatCodeToSymbol = (
   return formatter.format(amount);
 };
 
-export const uploadImages = async (
-  files: File[]
-): Promise<{ url: string; isFeatured: boolean }[] | null> => {
+export const uploadImage = async (file: File): Promise<string | null> => {
   try {
     const formData = new FormData();
-
-    // Append each file with the key 'images'
-    files.forEach((file) => {
-      formData.append("images", file);
-    });
+    formData.append("image", file); // Use 'image' as key (matches backend)
 
     const response = await fetch(
-      "http://localhost:5000/api/products/upload-images",
+      "http://localhost:5000/api/products/upload-image", // Updated API endpoint
       {
         method: "POST",
         body: formData,
@@ -35,14 +29,15 @@ export const uploadImages = async (
 
     if (response.ok) {
       const responseData = await response.json();
-      console.log("Full response data:", responseData); // Logs the full response object
-      console.log("Images array:", responseData.data.images); // Logs the images array
-      // Directly return the images array from the backend response
-      return responseData.data.images;
+      console.log("Full response data:", responseData); // Log full response
+      console.log("Uploaded image URL:", responseData.data.image); // Log single image URL
+
+      return responseData.data.image; // Return only the image URL
     } else {
-      throw new Error("Error uploading images");
+      throw new Error("Error uploading image");
     }
   } catch (error) {
-    throw new Error("Error uploading images");
+    console.error("Error uploading image:", error);
+    return null;
   }
 };

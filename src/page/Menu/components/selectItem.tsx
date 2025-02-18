@@ -42,12 +42,14 @@ const SelectItem: React.FC<PizzaDetailsDialogProps> = ({
   );
   const dispatch = useAppDispatch();
   const [quantity, setQuantity] = useState(1);
+  const [customization, setCustomization] = useState<string>("");
   const { showErrorMessage, showMessage } = useNotifier();
 
   useEffect(() => {
     if (pizza) {
       setSelectedIngredients([]);
       setQuantity(1);
+      setCustomization("");
     }
   }, [pizza]);
 
@@ -66,10 +68,7 @@ const SelectItem: React.FC<PizzaDetailsDialogProps> = ({
 
   const totalPrice = (
     pizza.basePrice * quantity +
-    selectedIngredients.reduce(
-      (acc, ingredient) => acc * quantity + ingredient.price,
-      0
-    )
+    selectedIngredients.reduce((acc, ingredient) => acc + ingredient.price, 0)
   ).toFixed(2);
 
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,11 +77,13 @@ const SelectItem: React.FC<PizzaDetailsDialogProps> = ({
   };
 
   const handlePizzaClick = (pizza: IPizza) => {
+    // console.log("Total Price:", totalPrice);
     const basketItem: BasketItem = {
       ...pizza,
       selectedIngredients,
       count: quantity,
       totalPrice: parseFloat(totalPrice),
+      customization,
     };
 
     dispatch(addItem(basketItem));
@@ -156,7 +157,7 @@ const SelectItem: React.FC<PizzaDetailsDialogProps> = ({
 
             <Divider sx={{ my: 2 }} />
             <Typography variant="h6">Select Extra Ingredients:</Typography>
-            <FormGroup sx={{ maxHeight: "120px", overflowY: "auto", mt: 1 }}>
+            <FormGroup sx={{ maxHeight: "120px", overflowY: "auto", mt: 0 }}>
               {pizza.ingredients.map((ingredient, index) => (
                 <FormControlLabel
                   key={index}
@@ -176,6 +177,19 @@ const SelectItem: React.FC<PizzaDetailsDialogProps> = ({
                 />
               ))}
             </FormGroup>
+            {/* Customization Field */}
+            <Divider sx={{ my: 2 }} />
+            <Typography variant="h6">Special instruction:</Typography>
+            <TextField
+              fullWidth
+              variant="outlined"
+              multiline
+              rows={3}
+              placeholder="Enter any special instructions or preferences"
+              value={customization}
+              onChange={(e) => setCustomization(e.target.value)}
+              sx={{ mt: 1 }}
+            />
 
             <Typography
               variant="h6"
