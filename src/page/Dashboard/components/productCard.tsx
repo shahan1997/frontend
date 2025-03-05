@@ -37,7 +37,7 @@ const ProductCard: React.FC<ProductProps> = ({
       onHoverEnd={() => setIsHovered(false)}
       onClick={goToMenu}
       sx={{
-        width: 300,
+        width: 250,
         height: 400,
         borderRadius: 2,
         boxShadow: 3,
@@ -49,7 +49,7 @@ const ProductCard: React.FC<ProductProps> = ({
       <motion.div
         variants={{
           rest: { backgroundColor: "white" },
-          hovered: { backgroundColor: "orange" },
+          hovered: { backgroundColor: "#dc2626" },
         }}
         style={{
           position: "absolute",

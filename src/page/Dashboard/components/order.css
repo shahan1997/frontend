@@ -1,0 +1,130 @@
+/* Container styles */
+.containerOrder {
+  padding: 1.25rem; /* 5 */
+  width: 100%; /* Ensure full width */
+}
+
+.containerOrder-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.containerOrder-header h2 {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #777;
+  margin: 0;
+}
+
+.containerOrder-header p {
+  font-size: 2rem;
+  color: #dc2626;
+  font-weight: 500;
+  margin: 0;
+}
+
+@media (min-width: 640px) {
+  .containerOrder {
+    padding: 2.5rem; /* 10 */
+  }
+}
+
+@media (min-width: 1024px) {
+  .containerOrder {
+    padding-left: 7rem; /* 28 */
+    padding-right: 7rem; /* 28 */
+  }
+}
+
+/* Heading styles */
+.heading {
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .heading {
+    font-size: 28px;
+  }
+}
+
+/* Subheading styles */
+.subheading {
+  font-size: 0.875rem; /* sm */
+  text-align: center;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-weight: bold;
+  color: #4b5563; /* slate-700 */
+}
+
+@media (max-width: 1024px) {
+  .subheading {
+    font-size: 0.75rem; /* xs */
+  }
+}
+
+/* Steps grid */
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* One column for smaller screens */
+  gap: 1rem;
+  margin: 0;
+  width: 100%; /* Ensure it takes the full width */
+}
+
+@media (min-width: 640px) {
+  .steps-grid {
+    grid-template-columns: repeat(2, 1fr); /* Two columns on medium screens */
+  }
+}
+
+@media (min-width: 1024px) {
+  .steps-grid {
+    grid-template-columns: repeat(4, 1fr); /* Four columns on large screens */
+  }
+}
+
+/* Step item styles */
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* Step image styles */
+.step-image {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+/* Step number styles */
+.step-number {
+  padding: 0.5rem;
+  border: 2px dotted #ef4444; /* Initial dotted border */
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  text-align: center;
+  font-weight: bold;
+  transition: border 0.3s ease; /* Smooth transition when hovering */
+}
+
+/* Step number hover styles */
+.step-number:hover {
+  border: 2px solid #ef4444; /* Change to solid border on hover */
+}
+
+/* Step text styles */
+.step-text {
+  font-weight: bold;
+  color: #4b5563; /* slate-700 */
+}

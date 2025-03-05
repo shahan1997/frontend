@@ -1,0 +1,121 @@
+/* General Styles */
+.hero-main {
+  display: grid;
+  grid-template-columns: 1fr; /* For small screens */
+  gap: 10px;
+  padding-left: 6rem;
+  height: auto;
+  overflow: hidden;
+}
+
+.hero-main .hero-column {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.hero-column .name {
+  display: inline-block;
+  font-weight: bold;
+  align-self: flex-start; /* Prevent flexbox from affecting the width */
+  background: #fde4e4;
+  color: red;
+  padding: 4px 15px;
+  border-radius: 18px;
+  margin: 0;
+}
+
+.hero-main .hero-image-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-main .hero-image-wrapper img {
+  margin-top: 3rem;
+  object-fit: cover;
+  width: 75%;
+}
+
+/* Media Queries for Larger Screens */
+@media (min-width: 768px) {
+  .hero-main {
+    grid-template-columns: repeat(2, 1fr); /* For medium screens and up */
+  }
+
+  .hero-main .hero-column {
+    padding-top: 5rem;
+  }
+}
+
+.hero-heading {
+  font-size: 3rem; /* Text size for medium screens */
+  font-weight: bold;
+  padding: 1.25rem 0;
+  letter-spacing: normal;
+  max-width: 500px;
+  margin: 0px;
+  line-height: 3.4rem;
+}
+
+.hero-heading span {
+  color: #dc2626;
+}
+
+/* Description Text */
+.hero-description {
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.9;
+  color: #475569;
+  max-width: 500px;
+  margin: 0px;
+}
+
+/* Buttons */
+.hero-button,
+.hero-button-secondary {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  max-width: 140px;
+  text-align: center;
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+
+.hero-button {
+  background-color: #dc2626;
+  color: white;
+  border: 2px solid #dc2626;
+}
+
+.hero-button:hover {
+  transform: scale(0.9);
+}
+
+.hero-button-secondary {
+  background-color: transparent;
+  color: #dc2626;
+  border: 2px solid #dc2626;
+}
+
+.hero-button-secondary:hover {
+  background: linear-gradient(to top, #f9fafb, #fca5a5);
+}
+
+.hero-actions {
+  display: flex;
+
+  gap: 1rem;
+  align-items: center;
+  justify-content: left;
+  margin-top: 2rem;
+}

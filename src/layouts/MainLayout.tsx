@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useAppDispatch } from "../store/hooks";
 import { MainLayoutProps } from "../core/interface/layout.interface";
-import { setEnableAuth } from "../page/Login/store/AuthSlice";
+import { setEnableAuth } from "../page/Signin/store/AuthSlice";
 
 /**
  * Main layout which will load the content with the children
@@ -12,9 +12,9 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log("toooo", token);
     if (typeof token === "string" && token.trim() !== "") {
       dispatch(setEnableAuth());
+      console.log("s");
     }
   }, [dispatch]);
 

@@ -7,9 +7,6 @@ import ProtectedRoute from "./ProtectedRoute";
 const Dashboard = React.lazy(() => import("../page/Dashboard"));
 const PizzaMenu = React.lazy(() => import("../page/Menu"));
 const Card = React.lazy(() => import("../page/Card"));
-const Login = React.lazy(() => import("../page/Login"));
-const Register = React.lazy(() => import("../page/Registrar"));
-const Order = React.lazy(() => import("../page/Order"));
 const AdminCard = React.lazy(() => import("../page/AdminCard"));
 const ContactForm = React.lazy(() => import("../page/ContactForm"));
 
@@ -52,16 +49,7 @@ const AppRoutes = () => {
           </Suspense>
         }
       />
-      <Route
-        path="/order"
-        element={
-          <ProtectedRoute>
-            <Suspense fallback={<Loader />}>
-              <Order />
-            </Suspense>{" "}
-          </ProtectedRoute>
-        }
-      />
+
       <Route
         path="/products"
         element={
@@ -70,24 +58,6 @@ const AppRoutes = () => {
               <AdminCard />
             </Suspense>{" "}
           </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/login"
-        element={
-          <Suspense fallback={<Loader />}>
-            <Login />
-          </Suspense>
-        }
-      />
-
-      <Route
-        path="/registrar"
-        element={
-          <Suspense fallback={<Loader />}>
-            <Register />
-          </Suspense>
         }
       />
 

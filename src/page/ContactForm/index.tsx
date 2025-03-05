@@ -1,106 +1,39 @@
-import React, { useState } from "react";
-import { Box, Typography, TextField, Button, Paper, Grid } from "@mui/material";
+import React from "react";
+import CallIcon from "@mui/icons-material/Call";
+import "./contactUs.css";
+import ReservationForm from "./reservationForm";
 
-const ContactForm: React.FC = () => {
-  const [formValues, setFormValues] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setFormValues({
-      ...formValues,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // No submission logic—just UI
-  };
-
+const Reservation = () => {
   return (
-    <Grid container spacing={4} sx={{ p: 4, maxWidth: "1200px", mx: "auto" }}>
-      <Grid item xs={12} md={6}>
-        <Box
-          component="img"
-          src="https://i.ibb.co/0yqYDXbw/doodle.jpg"
-          alt="Contact Illustration"
-          sx={{
-            width: "100%",
-            height: "100%",
-            borderRadius: 2,
-            objectFit: "cover",
-          }}
-        />
-      </Grid>
+    <div className="reservation-container">
+      {/* Overlay */}
+      <div className="reservation-overlay"></div>
 
-      {/* Right Side: Form */}
-      <Grid item xs={12} md={6}>
-        <Box sx={{ p: 4, borderRadius: 2 }}>
-          <Typography
-            variant="h4"
-            gutterBottom
-            sx={{
-              textAlign: "center",
-              fontWeight: 600,
-              mb: 3,
-            }}
-          >
-            Contact Us
-          </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate>
-            <TextField
-              fullWidth
-              name="name"
-              label="Your Name"
-              value={formValues.name}
-              onChange={handleChange}
-              margin="normal"
-            />
-            <TextField
-              fullWidth
-              name="email"
-              type="email"
-              label="Your Email"
-              value={formValues.email}
-              onChange={handleChange}
-              margin="normal"
-            />
-            <TextField
-              fullWidth
-              name="message"
-              label="Your Message"
-              multiline
-              rows={4}
-              value={formValues.message}
-              onChange={handleChange}
-              margin="normal"
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              sx={{
-                color: "white",
-                backgroundColor: "black",
-                mt: 2,
-                py: 1.5,
-                width: "100%",
-                fontWeight: 600,
-                borderRadius: 1,
-                textTransform: "none",
-              }}
-            >
-              Send Message
-            </Button>
-          </Box>
-        </Box>
-      </Grid>
-    </Grid>
+      <div className="reservation-content">
+        {/* Text Content */}
+        <div className="reservation-text">
+          <h1>DO YOU HAVE ANY PLAN TODAY? RESERVE YOUR TABLE</h1>
+          <p>
+            Enjoy a delightful dining experience tonight! Reserve your table now
+            to savor exquisite dishes, exceptional service, and an unforgettable
+            atmosphere with friends and family.
+          </p>
+
+          <div className="reservation-contact">
+            <div className="reservation-icon">
+              <CallIcon />
+            </div>
+            <div className="reservation-contact-info">
+              <h1>24/7 Available</h1>
+              <h1 className="phone-number">0750866441</h1>
+            </div>
+          </div>
+        </div>
+
+        <ReservationForm />
+      </div>
+    </div>
   );
 };
 
-export default ContactForm;
+export default Reservation;

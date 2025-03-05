@@ -1,157 +1,90 @@
 import React from "react";
-import { Box, Container, Grid, Typography, Link } from "@mui/material";
-import { appColors } from "../../theme/appColors";
-import { selectEnableAuth } from "../../page/Login/store/AuthSelector";
-import { useSelector } from "react-redux";
-import { motion } from "framer-motion";
+import logo from "../../assets/images/leaves.png";
+import { Link } from "react-router-dom";
+import "./footer.css";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import YouTubeIcon from "@mui/icons-material/YouTube";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import SendIcon from "@mui/icons-material/Send";
 
 const Footer = () => {
-  const isAdmin = useSelector(selectEnableAuth);
-  const linkHover = { x: 5, color: "white" };
-
   return (
-    <Box
-      sx={{
-        backgroundColor: "#000",
-        color: "#fff",
-        padding: "20px 0",
-      }}
-    >
-      <Container maxWidth="lg">
-        <Grid container spacing={4} alignItems="center">
-          <Grid item xs={12} sm={4}>
-            <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
-              <img
-                src={require("../../assets/images/footer.png")}
-                alt="Pizza Logo"
-                style={{ width: "150px", height: "auto" }}
-              />
-            </Box>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <Typography
-                variant="h6"
-                sx={{ fontWeight: "bold", color: appColors.white }}
-              >
-                Quick Links
-              </Typography>
-              <Link
-                component={motion.a}
-                href="/dashboard"
-                color="inherit"
-                underline="hover"
-                sx={{ mt: 1 }}
-                whileHover={linkHover}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                Home
-              </Link>
-              <Link
-                component={motion.a}
-                href="/menu"
-                color="inherit"
-                underline="hover"
-                sx={{ mt: 1 }}
-                whileHover={linkHover}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                Menu
-              </Link>
-              <Link
-                component={motion.a}
-                href="/contact-form"
-                color="inherit"
-                underline="hover"
-                sx={{ mt: 1 }}
-                whileHover={linkHover}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                Contact Us
-              </Link>
-              {isAdmin && (
-                <Link
-                  component={motion.a}
-                  href="/products"
-                  color="inherit"
-                  underline="hover"
-                  sx={{ mt: 1 }}
-                  whileHover={linkHover}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  Products
-                </Link>
-              )}
-              {isAdmin && (
-                <Link
-                  component={motion.a}
-                  href="/order"
-                  color="inherit"
-                  underline="hover"
-                  sx={{ mt: 1 }}
-                  whileHover={linkHover}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  Order
-                </Link>
-              )}
-            </Box>
-          </Grid>
-          ={" "}
-          <Grid item xs={12} sm={4}>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: { xs: "center", sm: "flex-end" },
-                paddingRight: { xs: 0, sm: 5 },
-              }}
-            >
-              <Typography
-                variant="h6"
-                sx={{ fontWeight: "bold", color: appColors.white }}
-              >
-                Pizza Customer
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{ mt: 1, color: appColors.white }}
-              >
-                201, main road, Batticaloa
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{ mt: 1, color: appColors.white }}
-              >
-                Phone: 0652225424
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{ mt: 1, color: appColors.white }}
-              >
-                Email: pizzacustomer@pizza.com
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{
-                  mt: 1,
-                  textAlign: "center",
-                  color: appColors.royalBlue[90],
-                }}
-              >
-                © 2025 Pizza Shop. All Rights Reserved.
-              </Typography>
-            </Box>
-          </Grid>
-        </Grid>
-      </Container>
-    </Box>
+    <footer className="footer">
+      <div className="footer__content">
+        <div className="footer__logo">
+          <img src={logo} alt="logo" />
+          <h5>Tasty Treat</h5>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt
+            pariatur accusamus
+          </p>
+        </div>
+
+        <div className="footer__section">
+          <h5 className="footer__title">Open Time</h5>
+          <div className="deliver__time-list">
+            <div className="delivery__time-item">
+              <span>Sunday - Thursday</span>
+              <p>10:00am - 11:00pm</p>
+            </div>
+            <div className="delivery__time-item">
+              <span>Friday - Saturday</span>
+              <p>Off day</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="footer__section">
+          <h5 className="footer__title">Contact</h5>
+          <div className="deliver__time-list">
+            <div className="delivery__time-item">
+              <p>Location: Nochchimunai, Batticaloa, Srilanka</p>
+            </div>
+            <div className="delivery__time-item">
+              <span>Phone: 0750866441</span>
+            </div>
+            <div className="delivery__time-item">
+              <span>Email: s@gmail.com</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="footer__section">
+          <h5 className="footer__title">Newsletter</h5>
+          <p>Subscribe to our newsletter</p>
+          <div className="newsletter">
+            <input type="email" placeholder="Enter your email" />
+            <span className="newsletter__button">
+              <i className="ri-send-plane-line"></i>
+              <SendIcon />
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="footer__bottom">
+        <div className="copyright__text">
+          Copyright - {new Date().getFullYear()}, website made by Shahan Yuki.
+          All Rights Reserved.
+        </div>
+        <div className="social__links">
+          <p>Follow: </p>
+          <Link to="https://www.facebook.com/muhib160">
+            <FacebookIcon style={{ color: "#dc2626" }} />
+          </Link>
+          <Link to="https://github.com/muhib160">
+            <GitHubIcon style={{ color: "#dc2626" }} />
+          </Link>
+          <Link to="https://www.youtube.com/c/MuhibsTechDiary">
+            <YouTubeIcon style={{ color: "#dc2626" }} />
+          </Link>
+          <Link to="https://www.linkedin.com/in/muhib160/">
+            <LinkedInIcon style={{ color: "#dc2626" }} />
+          </Link>
+        </div>
+      </div>
+    </footer>
   );
 };
 

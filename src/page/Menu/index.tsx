@@ -16,6 +16,7 @@ import {
 } from "../../core/interface/api.interface";
 import { useAppDispatch } from "../../store/hooks";
 import { addItem, BasketItem } from "./store/BasketSlice";
+import FoodItem from "./components/FoodItem";
 
 // Define the type for the ingredients
 interface Ingredient {
@@ -75,71 +76,22 @@ const PizzaMenu = () => {
           {!isLoading &&
             productDataMemo.pizzas.map((pizza) => (
               <Grid item xs={12} sm={6} md={4} lg={3} key={pizza._id}>
-                <Card
-                  sx={{ cursor: "pointer" }}
-                  onClick={() => handlePizzaClick(pizza)}
-                >
-                  <CardMedia
-                    component="img"
-                    height="140"
-                    image={
-                      pizza.images[0].startsWith("/")
-                        ? `http://localhost:5000${pizza.images[0]}`
-                        : pizza.images[0]
-                    }
-                    alt={pizza.name}
-                    sx={{
-                      objectFit: "cover",
-                      marginLeft: "0px",
-                      transition: "transform 0.3s ease-in-out",
-                      "&:hover": {
-                        transform: "scale(1.1)",
-                      },
-                    }}
+                <div onClick={() => handlePizzaClick(pizza)}>
+                  <FoodItem
+                    id={pizza._id}
+                    name={pizza.name}
+                    description={pizza.description}
+                    price={pizza.basePrice}
+                    image={pizza.images[0]}
                   />
-                  <CardContent>
-                    <Typography
-                      variant="body2"
-                      fontSize={"20px"}
-                      sx={{
-                        maxWidth: "100%",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {pizza.name}
-                    </Typography>
-                    <Typography
-                      variant="h6"
-                      fontSize={"18px"}
-                      color="text.secondary"
-                      sx={{
-                        maxWidth: "100%",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        display: "-webkit-box",
-                        WebkitBoxOrient: "vertical",
-                        WebkitLineClamp: 2,
-                      }}
-                    >
-                      {pizza.description}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.primary"
-                      sx={{ marginTop: 2 }}
-                    >
-                      Price: ${pizza.basePrice}
-                    </Typography>
-                  </CardContent>
-                </Card>
+                </div>
               </Grid>
             ))}
         </Grid>
       </Box>
 
       {/* Use the new PizzaDetailsDialog component */}
+
       <SelectItem
         open={open}
         pizza={selectedPizza}

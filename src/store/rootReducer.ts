@@ -2,7 +2,7 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import { posApi } from "../page/posApi";
 import { BasketReducer } from "../page/Menu/store/BasketSlice";
-import { AuthReducer } from "../page/Login/store/AuthSlice";
+import { AuthReducer } from "../page/Signin/store/AuthSlice";
 
 export const ROOT_ACTIONS = {
   logout: "logout",
@@ -11,8 +11,8 @@ export const ROOT_ACTIONS = {
 // Define the Reducers that will always be present in the application
 const staticReducers = {
   [posApi.reducerPath]: posApi.reducer,
-  auth: AuthReducer,
   basket: BasketReducer,
+  auth: AuthReducer,
 };
 
 const createReducer = (asyncReducers?: any) => (state: any, action: any) => {

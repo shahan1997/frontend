@@ -18,6 +18,7 @@ export interface IUserRegistrar {
   email: string;
   password: string;
   name: string;
+  role: number;
 }
 
 export interface IAuth {

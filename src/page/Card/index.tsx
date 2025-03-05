@@ -1,36 +1,34 @@
-import React, { useState } from "react";
+"use client";
+
+import { useState } from "react";
 import {
   Box,
   Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Button,
-  Paper,
-  CircularProgress,
+  Grid,
   IconButton,
+  Divider,
 } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
-import { selectBasketItems } from "../Menu/store/BasketSelector";
+import { Close as CloseIcon } from "@mui/icons-material";
+import { IOrderID } from "../../core/interface/api.interface";
 import {
   BasketItem,
   removeBasket,
   removeItem,
   updateItemCount,
 } from "../Menu/store/BasketSlice";
-import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import { appColors } from "../../theme/appColors";
-import { useNotifier } from "../../core/Notifier";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { selectBasketItems } from "../Menu/store/BasketSelector";
 import { useCancelOrderMutation, usePlaceOrderMutation } from "../posApi";
-import { IOrderID } from "../../core/interface/api.interface";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
+import { useNotifier } from "../../core/Notifier";
+import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
+import empty from "../../../src/assets/images/empty.svg";
+import addIconGreen from "../../../src/assets/images/add_icon_green.png";
 
-const CartView = () => {
+import removeIcon from "../../../src/assets/images/remove_icon_red.png";
+
+const Page = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const selectItem = useSelector(selectBasketItems);
@@ -137,164 +135,281 @@ const CartView = () => {
   };
 
   return (
-    <Box
-      sx={{
-        padding: 3,
-        minHeight: "80vh",
-        maxWidth: "1200px",
-        margin: "0 auto",
-      }}
-    >
-      <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold" }}>
-        Your Cart
-      </Typography>
+    <Box sx={{ bgcolor: "background.default", minHeight: "100vh", p: 4 }}>
+      <Box sx={{ mx: "auto" }}>
+        <Typography variant="h4" fontWeight="bold" gutterBottom>
+          Cart
+        </Typography>
+        <Divider sx={{ my: 2, bgcolor: "black", height: "2px" }} />
 
-      {selectItem.length === 0 ? (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Typography variant="h6" sx={{ color: "gray", marginTop: 5 }}>
-            Your cart is empty. Start adding some items!
-          </Typography>
-        </Box>
-      ) : (
-        <>
-          <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell sx={{ fontWeight: "bold" }}>Image</TableCell>
-                  <TableCell sx={{ fontWeight: "bold" }}>
-                    Product Name
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: "bold" }}>
-                    Base Price * Qty
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: "bold" }}>Quantity</TableCell>
-                  <TableCell sx={{ fontWeight: "bold" }}>
-                    Ingredients
-                  </TableCell>{" "}
-                  <TableCell sx={{ fontWeight: "bold" }}>
-                    Special Instructions
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: "bold" }}>Total Price</TableCell>
-                  <TableCell sx={{ fontWeight: "bold" }}></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {selectItem.map((item, idx) => {
-                  return (
-                    <TableRow
-                      key={idx}
-                      sx={{ "&:hover": { backgroundColor: "#f1f1f1" } }}
+        <Grid container spacing={3}>
+          {/* Cart Items */}
+          <Grid item xs={12} md={7}>
+            {selectItem.length === 0 ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  border: "2px dotted #C0C0C0",
+                  padding: 2,
+                  borderRadius: 6,
+                }}
+              >
+                <img
+                  src={empty}
+                  alt="empty"
+                  className="step-image"
+                  style={{
+                    width: "100%",
+                    maxWidth: "300px",
+                    height: "auto",
+                  }}
+                />
+
+                <Typography
+                  variant="body1"
+                  fontSize="2rem"
+                  color="black"
+                  fontWeight="bold"
+                  mb={2}
+                >
+                  Your cart is empty!
+                </Typography>
+                <Typography
+                  variant="body2"
+                  fontSize="1rem"
+                  color="black"
+                  mb={2}
+                >
+                  Add products to the cart
+                </Typography>
+              </Box>
+            ) : (
+              <Box>
+                {selectItem.map((item) => (
+                  <>
+                    <Box
+                      key={item._id}
+                      sx={{
+                        display: "flex",
+                        alignItems: "start",
+                        gap: 2,
+                        p: 2,
+                        pl: 0,
+                        pt: 0,
+                        pb: 0,
+                        mb: 0,
+                        bgcolor: "background.paper",
+                        borderRadius: 2,
+                      }}
                     >
-                      <TableCell>
-                        <img
-                          src={item.images[0]}
-                          alt={item.name}
-                          style={{
-                            width: 120,
-                            height: 120,
-                            objectFit: "cover",
-                            borderRadius: "8px",
-                            border: "1px solid #ddd",
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell>{item.name}</TableCell>
-                      <TableCell>
-                        ${item.basePrice.toFixed(2)} * {item.count}
-                      </TableCell>
-                      <TableCell>
-                        <IconButton onClick={() => handleDecrease(item)}>
-                          <RemoveIcon />
-                        </IconButton>
-                        {item.count}
-                        <IconButton onClick={() => handleIncrease(item)}>
-                          <AddIcon />
-                        </IconButton>
-                      </TableCell>
-                      <TableCell>
-                        {item.selectedIngredients.length > 0 ? (
-                          <ul>
-                            {item.selectedIngredients.map((ingredient, id) => (
-                              <li key={id}>
-                                {ingredient.name} - $
-                                {ingredient.price.toFixed(2)}
-                              </li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <Typography variant="body2" color="textSecondary">
-                            No extra ingredients
+                      <img
+                        src={item.images[0] || "/placeholder.jpg"}
+                        alt={item.name}
+                        width={80}
+                        height={80}
+                        style={{ borderRadius: 8, objectFit: "cover" }}
+                      />
+                      <Box sx={{ flex: 1 }}>
+                        <Typography
+                          color="black"
+                          variant="body2"
+                          fontSize="1.2rem"
+                          sx={{ textAlign: "left" }}
+                        >
+                          {item.name} - ${item.basePrice}
+                        </Typography>
+                        <Typography fontWeight="bold" color="#818589">
+                          {item.description}
+                        </Typography>
+                        <Typography fontWeight="Regular" color="#818589">
+                          <Box
+                            display="flex"
+                            alignItems="center"
+                            sx={{
+                              borderRadius: "50px",
+                              backgroundColor: "black",
+                              padding: "4px 8px",
+                              width: "fit-content",
+                            }}
+                          >
+                            <IconButton
+                              onClick={() => handleDecrease(item)}
+                              sx={{ padding: 0 }}
+                            >
+                              <img
+                                src={removeIcon}
+                                alt="Remove"
+                                style={{ width: "24px", height: "24px" }}
+                              />
+                            </IconButton>
+                            <Typography
+                              variant="body2"
+                              sx={{ margin: "0 8px", color: "white" }}
+                            >
+                              {item.count}
+                            </Typography>
+                            <IconButton
+                              onClick={() => handleIncrease(item)}
+                              sx={{ padding: 0 }}
+                            >
+                              <img
+                                src={addIconGreen}
+                                alt="Add"
+                                style={{ width: "24px", height: "24px" }}
+                              />
+                            </IconButton>
+                          </Box>
+                        </Typography>
+
+                        {item.selectedIngredients.length > 0 && (
+                          <>
+                            <Typography fontWeight="bold" mt={0}>
+                              Extras:
+                            </Typography>
+                            <Box
+                              sx={{
+                                display: "grid",
+                                gridTemplateColumns: "1fr 1fr",
+                                pl: 1,
+                                gap: 1,
+                              }}
+                            >
+                              {item.selectedIngredients.map((ing, index) => (
+                                <Box
+                                  key={index}
+                                  sx={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                    backgroundColor: "#f5f5f5",
+                                    padding: "4px 8px",
+                                    borderRadius: "4px",
+                                  }}
+                                >
+                                  <Typography
+                                    fontSize="0.9rem"
+                                    color="#71797E"
+                                    fontWeight="bold"
+                                  >
+                                    {ing.name}
+                                  </Typography>
+                                  <Typography
+                                    fontSize="0.9rem"
+                                    fontWeight="bold"
+                                    color="#71797E"
+                                  >
+                                    ${ing.name ? ing.price : "0.00"}
+                                  </Typography>
+                                </Box>
+                              ))}
+                            </Box>
+                          </>
+                        )}
+
+                        {item.customization && (
+                          <Typography
+                            fontWeight="Regular"
+                            color="#818589"
+                            sx={{ mt: 1 }}
+                          >
+                            Customization: {item.customization}
                           </Typography>
                         )}
-                      </TableCell>{" "}
-                      <TableCell>
-                        {item.customization && item.customization.trim() !== ""
-                          ? item.customization
-                          : "N/A"}
-                      </TableCell>
-                      <TableCell> ${item.totalPrice.toFixed(2)}</TableCell>
-                      <TableCell>
-                        <DeleteOutlinedIcon
-                          onClick={() => handleDelete(item._id)}
-                          sx={{
-                            color: appColors.carmineRed[30],
-                            cursor: "pointer",
-                          }}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
-
-          <Box sx={{ marginTop: 3, padding: 2, borderTop: "2px solid #ccc" }}>
-            <Typography
-              variant="h5"
-              sx={{ fontWeight: "bold", color: "#3f51b5" }}
-            >
-              Total Price for All Items: ${totalPrice}
-            </Typography>
-            <Button
-              variant="contained"
-              disabled={isLoading}
-              color="primary"
-              onClick={isOrderPlaced ? () => {} : handleProceedToCheckout}
-              sx={{ marginTop: 2 }}
-            >
-              {" "}
-              {isLoading && (
-                <CircularProgress size={16} sx={{ color: "white", mr: 1 }} />
-              )}
-              {isOrderPlaced ? "Track the Order" : "Proceed to Checkout"}
-            </Button>
-            {isOrderPlaced && (
-              <Button
-                variant="outlined"
-                disabled={updating}
-                color="secondary"
-                onClick={handleUpdateStatus}
-                sx={{ marginTop: 2, marginLeft: 2 }}
-              >
-                {updating && (
-                  <CircularProgress size={16} sx={{ color: "white", mr: 1 }} />
-                )}
-                Cancel Order
-              </Button>
+                        <Typography
+                          fontSize="1.4rem"
+                          fontWeight="bold"
+                          sx={{ mt: 2 }}
+                        >
+                          ${item.totalPrice.toFixed(2)}
+                        </Typography>
+                      </Box>
+                      <IconButton onClick={() => handleDelete(item._id)}>
+                        <CloseIcon />
+                      </IconButton>
+                    </Box>
+                    <Divider
+                      sx={{ my: 2, bgcolor: "#818589", height: "2px" }}
+                    />
+                  </>
+                ))}
+              </Box>
             )}
-          </Box>
-        </>
-      )}
+          </Grid>
+          {selectItem.length !== 0 ? (
+            <Grid item xs={12} md={5}>
+              <Box
+                sx={{
+                  p: 3,
+                  bgcolor: "#f5f5f5",
+                  borderRadius: "8px",
+                  border: "none",
+                }}
+              >
+                <Typography variant="h6" fontWeight="bold" textAlign="center">
+                  Order Summary
+                </Typography>
+                <Divider sx={{ my: 2, bgcolor: "black", height: "2px" }} />
+                <Box>
+                  {selectItem.map((item) => (
+                    <Box
+                      key={item._id}
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      mt={1}
+                    >
+                      <Typography variant="body2" fontSize="1rem">
+                        {item.name}
+                      </Typography>
+                      <Typography fontWeight="bold">
+                        ${item.totalPrice.toFixed(2)}
+                      </Typography>
+                    </Box>
+                  ))}
+                </Box>
+
+                <Divider sx={{ my: 2, bgcolor: "black", height: "2px" }} />
+                <Box display="flex" justifyContent="space-between">
+                  <Typography fontWeight="bold" fontSize="1.8rem">
+                    Total
+                  </Typography>
+                  <Typography fontWeight="bold" fontSize="1.8rem">
+                    ${totalPrice}
+                  </Typography>
+                </Box>
+
+                <Button
+                  variant="contained"
+                  fullWidth
+                  onClick={handleProceedToCheckout}
+                  sx={{
+                    pt: 0.5,
+                    pb: 0.5,
+                    mt: 2,
+                    border: "none",
+                    backgroundColor: "black",
+                    borderRadius: "8px",
+                    fontSize: "1.2rem",
+                    color: "white",
+                    "&:hover": {
+                      backgroundColor: "white",
+                      color: "black",
+                    },
+                  }}
+                >
+                  Complete Order
+                </Button>
+              </Box>
+            </Grid>
+          ) : (
+            <div></div>
+          )}
+        </Grid>
+      </Box>
     </Box>
   );
 };
 
-export default CartView;
+export default Page;

@@ -1,0 +1,136 @@
+/* General Styles */
+.testa-review__text {
+  color: #777;
+  line-height: 30px;
+  margin: 0px 0px;
+  font-size: 1.2rem;
+  text-align: left;
+  padding: 0px;
+}
+
+/* Slider Container */
+.testa-slider {
+  width: 100%;
+  max-width: 600px;
+}
+
+/* Each Slide */
+.testa-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Avatar Image */
+.testa-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* Slider Content (Flexbox Replacing Bootstrap) */
+.testa-slider__content {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* Replacing gap-3 */
+  margin-top: 0px;
+}
+
+/* Name Styling */
+.testa-name {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Responsive Design */
+@media only screen and (max-width: 768px) {
+  .testa-review__text {
+    font-size: 0.8rem;
+    margin: 20px 0px;
+  }
+
+  .testa-avatar {
+    width: 35px;
+    height: 35px;
+  }
+
+  .testa-name {
+    font-size: 0.8rem;
+  }
+
+  .testa-slider__content {
+    gap: 8px;
+  }
+}
+
+/* General Section Styles */
+.testimonial-section {
+  padding: 50px 20px;
+  background-color: #f8f9fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.testimonial-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  width: 100%;
+  gap: 40px;
+}
+
+.testimonial-content {
+  flex: 1;
+  text-align: left;
+}
+
+.testimonial-subtitle {
+  font-size: 1.2rem;
+  color: #ff6f61;
+  margin-bottom: 10px;
+}
+
+.testimonial-title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.testimonial-title span {
+  color: #dc2626;
+}
+
+.testimonial-desc {
+  color: #555;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.testimonial-image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.testimonial-img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 10px;
+}
+
+/* Responsive */
+@media only screen and (max-width: 768px) {
+  .testimonial-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .testimonial-image {
+    margin-top: 20px;
+  }
+}
